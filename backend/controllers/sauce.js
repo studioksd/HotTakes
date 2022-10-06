@@ -116,6 +116,8 @@ exports.likeSauce = (req, res, next) => {
         )
           .then(() => res.status(201).json({ message: "Annulation de dislike" }))
           .catch((error) => res.status(400).json({ error }));
+      } else {
+        res.status(400).json({ message: 'Scénario non pris en compte'});
       }
     })
     .catch((error) => res.status(400).json({ error }));
