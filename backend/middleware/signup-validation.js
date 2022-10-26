@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
     if (!validPass) {
         res.status(401).json({ message: 'Mot de passe invalide' });
     } else if (!validEmail) {
-        res.status(401).json({ message: 'email invalide' });
+        res.status(401).json({ message: 'Email invalide' });
     } else {
         next();
     }

@@ -30,9 +30,10 @@ exports.modifySauce = (req, res, next) => {
       } else {
         const filename = sauce.imageUrl.split('/images/')[1];
         fs.unlink('images/' + filename, () => {
-        Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-          .then(() => res.status(200).json({ message: 'Objet modifié !' }))
-          .catch(error => res.status(400).json({ error }));})
+          Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+            .then(() => res.status(200).json({ message: 'Objet modifié !' }))
+            .catch(error => res.status(400).json({ error }));
+        })
       }
     })
     .catch(error => res.status(400).json({ error }));
@@ -40,15 +41,15 @@ exports.modifySauce = (req, res, next) => {
 
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
-  .then(sauce => {
-    const filename = sauce.imageUrl.split('/images/')[1];
-    fs.unlink('images/' + filename, () => {
-      Sauce.deleteOne({ _id: req.params.id })
-      .then(() => res.status(200).json({ message: 'Objet supprimé !' }))
-      .catch(error => res.status(400).json({ error }));
+    .then(sauce => {
+      const filename = sauce.imageUrl.split('/images/')[1];
+      fs.unlink('images/' + filename, () => {
+        Sauce.deleteOne({ _id: req.params.id })
+          .then(() => res.status(200).json({ message: 'Objet supprimé !' }))
+          .catch(error => res.status(400).json({ error }));
+      })
     })
-  })
-  .catch(error => res.status(400).json({ error }));
+    .catch(error => res.status(400).json({ error }));
 };
 
 exports.getAllSauces = (req, res, next) => {
@@ -80,7 +81,7 @@ exports.likeSauce = (req, res, next) => {
         )
           .then(() => res.status(201).json({ message: "Sauce likée" }))
           .catch((error) => res.status(400).json({ error }));
-      } 
+      }
       else if (!objet.usersDisliked.includes(userId) && req.body.like === -1) {
         console.log('condition met for dislike');
         Sauce.updateOne(
@@ -92,7 +93,7 @@ exports.likeSauce = (req, res, next) => {
         )
           .then(() => res.status(201).json({ message: "Sauce likée" }))
           .catch((error) => res.status(400).json({ error }));
-      } 
+      }
       else if (objet.usersLiked.includes(userId) && req.body.like === 0) {
         console.log('condition met for unlike');
         Sauce.updateOne(
@@ -104,7 +105,7 @@ exports.likeSauce = (req, res, next) => {
         )
           .then(() => res.status(201).json({ message: "Annulation de like/dislike" }))
           .catch((error) => res.status(400).json({ error }));
-      } 
+      }
       else if (objet.usersDisliked.includes(userId) && req.body.like === 0) {
         console.log('condition met for undislike');
         Sauce.updateOne(
@@ -117,7 +118,7 @@ exports.likeSauce = (req, res, next) => {
           .then(() => res.status(201).json({ message: "Annulation de dislike" }))
           .catch((error) => res.status(400).json({ error }));
       } else {
-        res.status(400).json({ message: 'Scénario non pris en compte'});
+        res.status(400).json({ message: 'Scénario non pris en compte' });
       }
     })
     .catch((error) => res.status(400).json({ error }));

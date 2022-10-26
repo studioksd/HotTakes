@@ -1,10 +1,16 @@
 const express = require('express');
+const helmet = require("helmet");
 const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 const path = require('path');
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+app.use(helmet());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -15,16 +21,15 @@ app.use((req, res, next) => {
 
 app.options('*', function (req,res) { res.sendStatus(200); });
 
-mongoose.connect('mongodb+srv://ksd:ksdksd@cluster0.y8qvrim.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.y8qvrim.mongodb.net/?retryWrites=true&w=majority`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 app.use(bodyParser.json());
-
+	
 app.use(express.json());
-
 
 
 app.use('/api/auth', userRoutes);
